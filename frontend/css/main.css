@@ -1,0 +1,17 @@
+.center-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.is-clickable {
+  cursor: pointer;
+}
+
+.razer-color {
+  color: #3DDA25;
+}
+
+.razer-bg {
+  background: #3DDA25;
+}

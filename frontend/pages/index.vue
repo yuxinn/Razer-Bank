@@ -1,82 +1,47 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
+  <div id="app">
+    <v-app id="inspire">
+      <v-app id="inspire">
+        <v-content>
+          <v-container
+            class="fill-width"
+            fluid
           >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+            <v-row
+              align="center"
+              justify="center"
+            >
+              <v-col
+                cols="12"
+                sm="8"
+                md="4"
+              >
+                <v-card class="elevation-12">
+                  <v-toolbar
+                    color="primary"
+                    light
+                    flat
+                  >
+                    <v-toolbar-title>Razer Bank</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                  </v-toolbar>
+                  <v-card-text>
+                    <v-form>
+                      <img class="center-img mt-2 mb-4" src="~/assets/razer_bank.png" style="width: 65%;" />
+                      <div class="login-box is-clickable" @click="redirect"></div>
+                    </v-form>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-content>
+      </v-app>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -87,6 +52,39 @@ export default {
   components: {
     Logo,
     VuetifyLogo
+  },
+  data: () => ({
+    source: '',
+  }),
+  methods: {
+    redirect() {
+      const newUrl = "https://bank.ntucbee.click/auth/razer/login"
+      document.location.href = newUrl;
+    }
   }
 }
 </script>
+
+<style scoped>
+.login-btn-back {
+  display: none;
+}
+
+.login-btn-back:hover {
+  display: inline;
+}
+
+.login-btn:hover {
+  display: none;
+}
+
+.login-box {
+  width: auto;
+  height: 70px;
+  background: url('../assets/razer_login_btn.png') no-repeat center;
+}
+
+.login-box:hover {
+  background: url('../assets/razer_login_btn_dark.png') no-repeat center;
+}
+</style>
