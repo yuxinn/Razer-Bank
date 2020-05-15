@@ -45,14 +45,7 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  },
   data: () => ({
     source: '',
   }),
@@ -81,10 +74,10 @@ export default {
 .login-box {
   width: auto;
   height: 70px;
-  background: url('../assets/razer_login_btn.png') no-repeat center;
+  background: url('../assets/razer_login_btn_dark.png') no-repeat center;
 }
 
 .login-box:hover {
-  background: url('../assets/razer_login_btn_dark.png') no-repeat center;
+  background: url('../assets/razer_login_btn.png') no-repeat center;
 }
 </style>

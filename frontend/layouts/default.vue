@@ -1,37 +1,22 @@
 <template>
-  <v-app light>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-          @click="action(item.title)"
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-      <!-- v-if="loggedIn" -->
+  <v-app>
     <v-app-bar
+      v-if="loggedIn"
       :clipped-left="clipped"
       fixed
       app
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <nuxt-link to="/home">
+        <v-btn icon><v-icon>mdi-home</v-icon></v-btn>
+      </nuxt-link>
+      <v-spacer></v-spacer>
+      <nuxt-link to="/">
+        <v-btn
+          class="logout-btn"
+          dark
+          @click="logout"
+        > Log Out </v-btn>
+      </nuxt-link>
 
     </v-app-bar>
     <v-content>
@@ -52,6 +37,7 @@
 import { mapMutations } from 'vuex'
 
 export default {
+  auth: 'guest',
   data () {
     return {
       clipped: false,
@@ -86,13 +72,15 @@ export default {
     }
   },
   methods: {
-    action(title) {
-      if (title == 'Logout') 
-        this.drawer = !this.drawer
-    },
     ...mapMutations({
-      login: 'login'
+      logout: 'logout',
     })
   }
 }
 </script>
+
+<style scoped>
+.logout-btn {
+  color: #3DDA25;
+}
+</style>

@@ -22,9 +22,11 @@
     <!-- Verification -->
     <v-row class="my-3">
       <v-flex class="text-center">
-        <v-alert type="error" v-if="!verified">
-          Verify your profile to start banking
-        </v-alert>
+        <nuxt-link to="/verification" style="color: inherit; text-decoration: inherit;">
+          <v-alert class="is-clickable" type="error" v-if="!verified">
+            Verify your profile to start banking
+          </v-alert>
+        </nuxt-link>
       </v-flex>
     </v-row>
 
@@ -55,12 +57,14 @@
 import { mapMutations } from 'vuex'
 
 export default {
+  middleware: 'auth',
   data () {
     return {
+      accounts: [],
       items: [
         {
           icon: 'mdi-bank',
-          title: 'Accounts',
+          title: 'Create Account',
           to: '/home'
         },
         {
@@ -87,8 +91,17 @@ export default {
     }
   },
   computed: {
+    test() {
+      return this.$store.state
+    },
+    name() {
+      return this.$store.state.firstName + ' ' + this.$store.state.lastName
+    },
+    loggedIn() {
+      return this.$store.state.token != ''
+    },
     verified() {
-      return this.$store.state.verified
+      return this.$store.state.nric != ''
     }
   }
 }

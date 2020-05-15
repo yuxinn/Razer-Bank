@@ -12,7 +12,12 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.10.3",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "nuxt-vuex-localstorage": "^1.2.6",
+    "vue-base64-file-upload": "^1.0.4",
+    "vue-jwt-decode": "^0.1.0",
+    "vuex-persist": "^2.2.0",
+    "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
