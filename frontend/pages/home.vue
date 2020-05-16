@@ -24,7 +24,7 @@
       <v-flex class="text-center">
         <nuxt-link to="/verification" style="color: inherit; text-decoration: inherit;">
           <v-alert class="is-clickable" type="error" v-if="!verified">
-            Verify your profile to start banking
+            Verify your profile to start banking!
           </v-alert>
         </nuxt-link>
       </v-flex>
@@ -32,45 +32,64 @@
 
     <!-- Menu -->
     <v-row class="mt-2">
+          <v-container class="mx-3">
       <v-flex class="text-center">
         <v-sheet
+          dark
           class="d-flex"
-          color="grey lighten-3"
+
           height="80"
           :elevation="8"
         >
-          <v-col v-for="item in items" :key="item.title">
-            <v-icon large class="btn is-clickable">{{item.icon}}</v-icon>
-            <p style="color: black;" class="body-2 font-weight-light mt-1">{{item.title}}</p>
-          </v-col>
+            <v-col v-for="item in items" :key="item.title">
+              <nuxt-link :to="item.to" style="text-decoration: inherit;">
+                <v-icon large class="btn is-clickable">{{item.icon}}</v-icon>
+              </nuxt-link>
+              <p style="color: whitesmoke;" class="body-2 font-weight-light mt-1">{{item.title}}</p>
+            </v-col>
         </v-sheet>
       </v-flex>
+          </v-container>
     </v-row>
 
     <!-- Accounts -->
-    <v-row class="mt-4">
-      <p class="mt-4 headline font-weight-black">My Accounts</p>
-    </v-row>
+
+    <Accounts></Accounts>
+
+    <!-- Welcome msg -->
+    <v-snackbar
+      class="mt-5"
+      v-model="welcome"
+      color="primary"
+      :top="true"
+      :timeout="5000"
+    >
+      Welcome to Razer Bank, {{name}}!
+    </v-snackbar>
   </div>
 </template>
 <script>
 import { mapMutations } from 'vuex'
+import Accounts from '~/components/Accounts.vue'
 
 export default {
   middleware: 'auth',
-  data () {
+  components: {
+    Accounts
+  },
+  data() {
     return {
-      accounts: [],
+      welcome: false,
       items: [
         {
           icon: 'mdi-bank',
-          title: 'Create Account',
-          to: '/home'
+          title: 'Accounts',
+          to: '/create'
         },
         {
           icon: 'mdi-cash-multiple',
           title: 'Transfer',
-          to: '/home'
+          to: '/transfer'
         },
         {
           icon: 'mdi-card-bulleted',
@@ -91,9 +110,6 @@ export default {
     }
   },
   computed: {
-    test() {
-      return this.$store.state
-    },
     name() {
       return this.$store.state.firstName + ' ' + this.$store.state.lastName
     },
@@ -103,13 +119,16 @@ export default {
     verified() {
       return this.$store.state.nric != ''
     }
+  },
+  created() {
+    this.welcome = true
   }
 }
 </script>
 
 <style scoped>
 .btn {
-  color: grey;
+  color: whitesmoke;
 }
 .btn:hover{
   color: #3DDA25;

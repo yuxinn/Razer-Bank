@@ -29,6 +29,7 @@
       app
     >
       <span>&copy; Farmer Bank {{ new Date().getFullYear() }}</span>
+       <v-spacer></v-spacer><span class="text--secondary">For Bankers, By Farmers</span><v-icon color="primary">mdi-pine-tree</v-icon>
     </v-footer>
   </v-app>
 </template>
@@ -43,23 +44,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Home',
-          to: '/home'
-        },
-        {
-          icon: 'mdi-bank',
-          title: 'Accounts',
-          to: '/home'
-        },
-        {
-          icon: 'mdi-arrow-right',
-          title: 'Logout',
-          to: '/'
-        }
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,

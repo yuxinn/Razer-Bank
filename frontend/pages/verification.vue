@@ -1,5 +1,6 @@
 <template>
   <div class="verification">
+
     <v-row>
       <v-flex class="text-center">
         <img
@@ -9,7 +10,7 @@
           class="mt-2"
         >
         <blockquote class="blockquote">
-          Profile Verification
+          Identity Verification
           <footer>
             <small>
               <em>Fast and easy</em>
@@ -18,13 +19,21 @@
         </blockquote>
       </v-flex>
     </v-row>
-
+    <v-sheet 
+      dark
+      class="mb-1 d-flex"
+      height="auto"
+    >
+    <v-container class="my-4 mx-4">
     <v-row>
-      <v-col :cols="7">
+      <v-col :cols="5">
         <v-text-field label="First Name" v-model="firstName" :rules="rules" hide-details="auto"></v-text-field>
       </v-col>
-      <v-col :cols="5">
+      <v-col :cols="4">
         <v-text-field label="Last Name" v-model="lastName" :rules="rules" hide-details="auto"></v-text-field>
+      </v-col>
+      <v-col :cols="3">
+        <v-text-field label="NRIC" v-model="nric" :rules="rules" hide-details="auto"></v-text-field>
       </v-col>
     </v-row>
 
@@ -36,7 +45,7 @@
 
     <v-row>
       <v-col :cols="4">
-        <v-text-field label="Postal Code" v-model="postal" :rules="rules" hide-details="auto"></v-text-field>
+        <v-text-field label="Postal Code" v-model="postal" :rules="postal_rules" hide-details="auto"></v-text-field>
       </v-col>
       <v-col :cols="4">
         <v-select
@@ -66,7 +75,8 @@
           prepend-icon="mdi-camera"
           outlined dense
           accept="image/png, image/jpeg, image/jpg"
-          @change="previewImage(true)"
+          v-model="frontraw"
+          @change="previewImage($event, 'front')"
         >
         </v-file-input>
       </v-col>
@@ -80,8 +90,9 @@
           label="NRIC Back"
           prepend-icon="mdi-camera"
           outlined dense
+          v-model="backraw"
           accept="image/png, image/jpeg, image/jpg"
-          @change="previewImage(false)"
+          @change="previewImage($event, 'back')"
         >
         </v-file-input>
       </v-col>
@@ -95,17 +106,50 @@
         Verify Profile
       </v-btn>
     </v-row>
+    </v-container>
+    </v-sheet>
+
+    <v-snackbar
+      class="mt-5"
+      v-model="success"
+      color="success"
+      :top="true"
+      :timeout="5000"
+    >
+      Profile verification successful. Please relogin to start banking.
+    </v-snackbar>
+
+    <v-snackbar
+      class="mt-5"
+      v-model="error"
+      color="error"
+      :top="true"
+      :timeout="5000"
+    >
+      {{errMsg}}
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
+  middleware: 'auth',
   data() {
     return {
       // base64
+      success: false,
+      error: false,
+      errMsg: '',
+
+      frontraw: undefined,
+      backraw: undefined,
+
       front: null,
       back: null,
 
+      nric: '',
       firstName: this.$store.state.firstName || '',
       lastName: this.$store.state.lastName || '',
       address: '',
@@ -125,20 +169,32 @@ export default {
 
       rules: [
         value => !!value || 'Required.',
-        value => (value && value.length >= 3) || 'Min 3 characters',
+        value => (value && value.length >= 6) || 'Min 2 characters',
+      ],
+      postal_rules: [
+        value => !!value || 'Required.',
+        value => (value && value.length >= 6) || 'Min 6 characters',
       ],
     }
   },
+  mounted() {
+    this.success = false
+  },
   methods: {
-    previewImage: function(front) {
-      const preview = document.querySelector('img');
-      const file = document.querySelector('input[type=file]').files[0];
+    previewImage: function(event, type) {
       const reader = new FileReader();
+      var file = this.frontraw
+      if (type==="back") {
+        file = this.backraw
+      }
 
       reader.addEventListener("load", () => {
         // convert image file to base64 string
-        if (front) { this.front = reader.result; }
-        else { this.back = reader.result }
+        if (type==='front') { 
+          this.front = reader.result 
+        } else { 
+          this.back = reader.result 
+        }
         // console.log(reader.result)
       }, false);
 
@@ -150,22 +206,35 @@ export default {
       const url = 'https://bank.ntucbee.click/bank/client/register'
       try {
         const data = {
+          nric: this.nric,
           firstName: this.firstName,
           lastName: this.lastName,
           address: this.address,
           postal: this.postal,
           country: this.country.toUpperCase(),
-          language: this.language.toUpperCase(),
-          icFront: this.front,
-          icBack: this.back
+          preferredLanguage: this.language.toUpperCase(),
+          icFront: this.front.split(',')[1],
+          icBack: this.back.split(',')[1]
         }
-        console.log(data)
-        let resp = (await this.$axios.post(url), data).data
+        let resp = await this.$axios({
+          method: 'post',
+          url: url,
+          data: data
+        })
         console.log(resp)
+        this.success = true
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(3200);
+        this.logout()
+        this.$router.push('/')
       } catch(err) {
-        console.error(err)
+        this.error = true
+        this.errMsg= err.response.data.error
       }
-    }
+    },
+    ...mapMutations({
+      logout: 'logout'
+    })
   }
 }
 </script>
