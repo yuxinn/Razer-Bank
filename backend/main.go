@@ -164,7 +164,7 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 		json.NewDecoder(uresp.Body).Decode(&uresult)
 		nric, mambukey := SeeIfExisting((uresult["email"].(string)))
 		jwttoken := GenerateJWT(uresult["email"].(string), uresult["first_name"].(string), uresult["last_name"].(string), nric, mambukey)
-		u := "http://localhost:3000/verify?token=" + jwttoken
+		u := "https://bank.ntucbee.click/verify?token=" + jwttoken
 		http.Redirect(w, r, u, http.StatusTemporaryRedirect)
 		return
 	}
