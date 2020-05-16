@@ -75,9 +75,6 @@
           </v-expansion-panels>
         </template>
       </v-container>
-
-
-
     </v-sheet>
 
   </div>

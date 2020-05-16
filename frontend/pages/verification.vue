@@ -20,93 +20,92 @@
       </v-flex>
     </v-row>
     <v-sheet 
-      dark
+      color="grey lighten-3"
       class="mb-1 d-flex"
       height="auto"
     >
-    <v-container class="my-4 mx-4">
-    <v-row>
-      <v-col :cols="5">
-        <v-text-field label="First Name" v-model="firstName" :rules="rules" hide-details="auto"></v-text-field>
-      </v-col>
-      <v-col :cols="4">
-        <v-text-field label="Last Name" v-model="lastName" :rules="rules" hide-details="auto"></v-text-field>
-      </v-col>
-      <v-col :cols="3">
-        <v-text-field label="NRIC" v-model="nric" :rules="rules" hide-details="auto"></v-text-field>
-      </v-col>
-    </v-row>
+      <v-container class="my-4 mx-4">
+        <v-row>
+          <v-col :cols="5">
+            <v-text-field label="First Name" v-model="firstName" :rules="rules" hide-details="auto"></v-text-field>
+          </v-col>
+          <v-col :cols="4">
+            <v-text-field label="Last Name" v-model="lastName" :rules="rules" hide-details="auto"></v-text-field>
+          </v-col>
+          <v-col :cols="3">
+            <v-text-field label="NRIC" v-model="nric" :rules="nric_rules" hide-details="auto"></v-text-field>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col :cols="12">
-        <v-text-field label="Address" v-model="address" :rules="rules" hide-details="auto"></v-text-field>
-      </v-col>
-    </v-row>
+        <v-row>
+          <v-col :cols="12">
+            <v-text-field label="Address" v-model="address" :rules="rules" hide-details="auto"></v-text-field>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col :cols="4">
-        <v-text-field label="Postal Code" v-model="postal" :rules="postal_rules" hide-details="auto"></v-text-field>
-      </v-col>
-      <v-col :cols="4">
-        <v-select
-          :items="countries"
-          dark
-          v-model="country"
-          label="Country"
-        ></v-select>
-      </v-col>
-      <v-col :cols="4">
-        <v-select
-          :items="languages"
-          dark
-          v-model="language"
-          label="Language"
-        ></v-select>
-      </v-col>
-    </v-row>
+        <v-row>
+          <v-col :cols="4">
+            <v-text-field label="Postal Code" v-model="postal" :rules="postal_rules" hide-details="auto"></v-text-field>
+          </v-col>
+          <v-col :cols="4">
+            <v-select
+              :items="countries"
+              v-model="country"
+              label="Country"
+            ></v-select>
+          </v-col>
+          <v-col :cols="4">
+            <v-select
+              :items="languages"
+              v-model="language"
+              label="Language"
+            ></v-select>
+          </v-col>
+        </v-row>
 
-    <v-row class="ml-1 mt-3">
-      <v-col :cols="3" style="border: 1px solid #3DDA25;">
-        <img :src="front" height="150" alt="">
-      </v-col>
-      <v-col>
-        <v-file-input 
-          label="NRIC Front"
-          prepend-icon="mdi-camera"
-          outlined dense
-          accept="image/png, image/jpeg, image/jpg"
-          v-model="frontraw"
-          @change="previewImage($event, 'front')"
-        >
-        </v-file-input>
-      </v-col>
-    </v-row>
-    <v-row class="ml-1 mt-5">
-      <v-col :cols="3" style="border: 1px solid #3DDA25;">
-        <img :src="back" height="150" alt="">
-      </v-col>
-      <v-col>
-        <v-file-input 
-          label="NRIC Back"
-          prepend-icon="mdi-camera"
-          outlined dense
-          v-model="backraw"
-          accept="image/png, image/jpeg, image/jpg"
-          @change="previewImage($event, 'back')"
-        >
-        </v-file-input>
-      </v-col>
-    </v-row>
-    <v-row justify="center" class="mt-5">
-      <v-btn
-        class="logout-btn mt-4"
-        dark
-        @click="verify"
-      >
-        Verify Profile
-      </v-btn>
-    </v-row>
-    </v-container>
+        <v-row class="ml-1 mt-3">
+          <v-col :cols="3" style="border: 1px solid #3DDA25;">
+            <img :src="front" height="150" alt="">
+          </v-col>
+          <v-col>
+            <v-file-input 
+              label="NRIC Front"
+              prepend-icon="mdi-camera"
+              outlined dense
+              accept="image/png, image/jpeg, image/jpg"
+              v-model="frontraw"
+              @change="previewImage($event, 'front')"
+            >
+            </v-file-input>
+          </v-col>
+        </v-row>
+        <v-row class="ml-1 mt-5">
+          <v-col :cols="3" style="border: 1px solid #3DDA25;">
+            <img :src="back" height="150" alt="">
+          </v-col>
+          <v-col>
+            <v-file-input 
+              label="NRIC Back"
+              prepend-icon="mdi-camera"
+              outlined dense
+              v-model="backraw"
+              accept="image/png, image/jpeg, image/jpg"
+              @change="previewImage($event, 'back')"
+            >
+            </v-file-input>
+          </v-col>
+        </v-row>
+        <v-row justify="center" class="mt-5">
+          <v-btn
+            :loading="loading"
+            class="logout-btn mt-4"
+            dark
+            @click="verify"
+          >
+            Verify Profile
+          </v-btn>
+        </v-row>
+      </v-container>
     </v-sheet>
 
     <v-snackbar
@@ -139,6 +138,7 @@ export default {
   data() {
     return {
       // base64
+      loading: false,
       success: false,
       error: false,
       errMsg: '',
@@ -175,6 +175,10 @@ export default {
         value => !!value || 'Required.',
         value => (value && value.length >= 6) || 'Min 6 characters',
       ],
+      nric_rules: [
+        value => !!value || 'Required.',
+        value => (value && value.length >= 6) || 'Min 8 characters',
+      ],
     }
   },
   mounted() {
@@ -205,6 +209,7 @@ export default {
     async verify() {
       const url = 'https://bank.ntucbee.click/bank/client/register'
       try {
+        this.loading=true
         const data = {
           nric: this.nric,
           firstName: this.firstName,
@@ -230,6 +235,8 @@ export default {
       } catch(err) {
         this.error = true
         this.errMsg= err.response.data.error
+      } finally {
+        this.loading = false;
       }
     },
     ...mapMutations({

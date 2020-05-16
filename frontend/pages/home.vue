@@ -92,6 +92,11 @@ export default {
           to: '/transfer'
         },
         {
+          icon: 'mdi-cash-multiple',
+          title: 'Loans',
+          to: '/home'
+        },
+        {
           icon: 'mdi-card-bulleted',
           title: 'Cards',
           to: '/home'
@@ -99,11 +104,6 @@ export default {
         {
           icon: 'mdi-chart-areaspline',
           title: 'Invest',
-          to: '/home'
-        },
-        {
-          icon: 'mdi-cash-multiple',
-          title: 'Loans',
           to: '/home'
         }
       ],

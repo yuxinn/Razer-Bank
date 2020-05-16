@@ -28,7 +28,7 @@
       :fixed="fixed"
       app
     >
-      <span>&copy; Farmer Bank {{ new Date().getFullYear() }}</span>
+      <span>&copy; Razer Bank {{ new Date().getFullYear() }}</span>
        <v-spacer></v-spacer><span class="text--secondary">For Bankers, By Farmers</span><v-icon color="primary">mdi-pine-tree</v-icon>
     </v-footer>
   </v-app>
