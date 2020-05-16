@@ -28,7 +28,7 @@
           </v-col>
           <v-col :cols="6">
             <v-row>
-              <v-col :cols="12" class="pb-0"><p class="title font-weight-black">Target Account</p></v-col>
+              <v-col :cols="12" class="pb-0"><p class="title font-weight-black">Payee Account</p></v-col>
               <v-col :cols="12" class="pt-0" style="margin-top:-15px">
                 <v-radio-group 
                   v-if="targetType=='own'"
@@ -59,7 +59,7 @@
         <v-row>
           <v-col :cols="6">
             <v-row>
-              <v-col :cols="12" class="pb-0"><p class="title font-weight-black">Target</p></v-col>
+              <v-col :cols="12" class="pb-0"><p class="title font-weight-black">Payee</p></v-col>
               <v-col :cols="12" class="pt-0" style="margin-top:-15px">
                 <v-radio-group v-model="targetType" row @change="targetAcc=''">
                   <v-radio label="My Account" value="own"></v-radio>
@@ -117,6 +117,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data() {
     return {
       success: false,

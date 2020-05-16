@@ -5,7 +5,7 @@
         class="fill-width"
         fluid
       >
-        <v-row style="margin-top: 22%;"
+        <v-row style="margin-top: 5%;"
           align="center"
           justify="center"
         >
@@ -88,20 +88,5 @@ export default {
   right: 0;
   left: 0;
   z-index: 0;
-}
-
-.login-container {
-  text-align: center;
-  margin: auto;
-  width: 300px;
-  height: 286px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  top: 20%;
-  position: relative;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  color: white;
 }
 </style>

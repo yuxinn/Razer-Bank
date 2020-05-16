@@ -20,16 +20,16 @@
     </v-row>
 
     <!-- Verification -->
-    <v-row class="my-3">
+    <v-row class="my-3" v-if="!verified">
       <v-flex class="text-center">
         <nuxt-link to="/verification" style="color: inherit; text-decoration: inherit;">
-          <v-alert class="is-clickable" type="error" v-if="!verified">
+          <v-alert class="is-clickable" type="error" >
             Verify your profile to start banking!
           </v-alert>
         </nuxt-link>
       </v-flex>
     </v-row>
-
+    
     <!-- Menu -->
     <v-row class="mt-2">
           <v-container class="mx-3">
