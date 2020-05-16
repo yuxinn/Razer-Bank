@@ -107,7 +107,6 @@ func RedirectToRazer(w http.ResponseWriter, r *http.Request) {
 	if (*r).Method == "OPTIONS" {
 		return
 	}
-	// u := "https://oauth2.razer.com/authorize_openid?response_type=code&l=en&scope=openid+email&client_id=3ff785489ba2ed304b6880e481f238cfeada487e&state=login&redirect_uri=https://bank.ntucbee.click/auth/razer/callback"
 	u := "https://oauth2.razer.com/authorize_openid?response_type=code&l=en&scope=openid+email+profile&client_id=3ff785489ba2ed304b6880e481f238cfeada487e&state=login&redirect_uri=https://bank.ntucbee.click/auth/razer/callback"
 	http.Redirect(w, r, u, http.StatusTemporaryRedirect)
 }
@@ -121,7 +120,6 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query()["code"][0]
 	fmt.Println(code)
 	selection := "https://oauth2.razer.com/token"
-	// selection := "https://oauth2.razer.com/token?client_id=3ff785489ba2ed304b6880e481f238cfeada487e&client_secret=72a8ed13b850184a62d1f00c7b4e8ddc1fac5411&grant_type=authorization_code&code=" + code + "&redirect_uri=http://localhost:3000/home"
 	client := http.Client{}
 	data := url.Values{}
 	data.Set("client_id", "3ff785489ba2ed304b6880e481f238cfeada487e")
@@ -162,11 +160,29 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 		}
 		var uresult map[string]interface{}
 		json.NewDecoder(uresp.Body).Decode(&uresult)
-		nric, mambukey := SeeIfExisting((uresult["email"].(string)))
-		jwttoken := GenerateJWT(uresult["email"].(string), uresult["first_name"].(string), uresult["last_name"].(string), nric, mambukey)
-		u := "https://bank.ntucbee.click/verify?token=" + jwttoken
-		http.Redirect(w, r, u, http.StatusTemporaryRedirect)
-		return
+		if CheckeEmailExist(uresult["email"].(string)) {
+			nric, mambukey := SeeIfExisting((uresult["email"].(string)))
+			jwttoken := GenerateJWT(uresult["email"].(string), uresult["first_name"].(string), uresult["last_name"].(string), nric, mambukey)
+			u := "https://bank.ntucbee.click/verify?token=" + jwttoken
+			http.Redirect(w, r, u, http.StatusTemporaryRedirect)
+			return
+		} else {
+			_ = AddUser(uresult["email"].(string))
+			nric, mambukey := SeeIfExisting((uresult["email"].(string)))
+			fn := ""
+			ln := ""
+			if uresult["first_name"] != nil {
+				fn = uresult["first_name"].(string)
+			}
+			if uresult["last_name"] != nil {
+				ln = uresult["last_name"].(string)
+			}
+			jwttoken := GenerateJWT(uresult["email"].(string), fn, ln, nric, mambukey)
+			u := "https://bank.ntucbee.click/verify?token=" + jwttoken
+			http.Redirect(w, r, u, http.StatusTemporaryRedirect)
+			return
+		}
+
 	}
 
 }
@@ -421,7 +437,7 @@ func CreateSavingsAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 			"accountType": "CURRENT_ACCOUNT",
 			"currencyCode": "SGD",
 			"allowOverdraft": "true",
-			"overdraftLimit": "0",
+			"overdraftLimit": "500",
 			"overdraftInterestSettings": {
 				"interestRate": 5
 			},
@@ -448,6 +464,7 @@ func CreateSavingsAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
 	json.NewEncoder(w).Encode(result)
+
 }
 
 func TransferBetweenClients(w http.ResponseWriter, r *http.Request) {

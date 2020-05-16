@@ -118,6 +118,18 @@ func FWDKycAh(image string) map[string]interface{} {
 	return result
 }
 
+func CheckeEmailExist(email string) bool {
+	CheckDB()
+	statement := "select email from clients where email = $1"
+	results := db.QueryRow(statement, email)
+	outcome := ""
+	err := results.Scan(&outcome)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func SeeIfExisting(email string) (string, string) {
 	CheckDB()
 	statement := "select COALESCE (mambukey, '') from clients where email = $1"
@@ -169,6 +181,20 @@ func UpdateMambuKey(email string, mambykey string) (int64, error) {
 		panic(updateErr)
 	}
 	return rows, updateErr
+}
+
+func AddUser(email string) bool {
+	CheckDB()
+	statement := "INSERT INTO clients VALUES ($1,$2,null)"
+	update, err := db.Exec(statement, email, "false")
+	if err != nil {
+		panic(err)
+	}
+	rows, updateErr := update.RowsAffected()
+	if updateErr != nil {
+		panic(updateErr)
+	}
+	return rows == 1
 }
 
 // func CreateOrganization(org Organization) (int64, error) {
