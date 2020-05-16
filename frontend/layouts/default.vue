@@ -7,9 +7,17 @@
       app
     >
       <nuxt-link to="/home">
-        <v-btn icon><v-icon>mdi-home</v-icon></v-btn>
+        <v-btn icon><v-icon class="home-icon">mdi-home</v-icon></v-btn>
       </nuxt-link>
+
+
       <v-spacer></v-spacer>
+      <img
+        style="height: 43px; width: auto; margin-right: 4%"
+        src="~/assets/razer_bank.png"
+        alt="bank-logo"
+        class="mt-2"
+      >
       <nuxt-link to="/">
         <v-btn
           class="logout-btn"
@@ -17,7 +25,6 @@
           @click="logout"
         > Log Out </v-btn>
       </nuxt-link>
-
     </v-app-bar>
     <v-content>
       <v-container>
@@ -67,4 +74,12 @@ export default {
 .logout-btn {
   color: #3DDA25;
 }
+
+.home-icon {
+  color: #1E1E1E;
+}
+.home-icon:hover {
+  color: #3DDA25;
+}
+
 </style>

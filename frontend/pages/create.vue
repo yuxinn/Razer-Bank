@@ -53,7 +53,7 @@
             <v-col :cols="12" class="pb-0"><p class="title font-weight-black">Amount</p></v-col>
             <v-col :cols="10" class="pt-0" style="">
               <v-text-field
-                label="Outlined"
+                label="SGD"
                 v-model="amount"
                 placeholder="$500.00"
                 outlined
@@ -98,6 +98,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data() {
     return {
       success: false,
@@ -119,6 +120,10 @@ export default {
       savings: {},
       transactionId: undefined,
     }
+  },
+  mounted() {
+    this.success = false
+    this.retrieveAccounts()
   },
   computed: {
     accName() {
@@ -194,9 +199,5 @@ export default {
       }
     }
   },
-  mounted() {
-    this.success = false
-    this.retrieveAccounts()
-  }
 }
 </script>
