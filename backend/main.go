@@ -57,9 +57,9 @@ func Mambu(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	selection := "https://razerhackathon.sandbox.mambu.com/api/branches/Team14"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -83,8 +83,8 @@ func FWDKyc(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	selection := "https://niw1itg937.execute-api.ap-southeast-1.amazonaws.com/Prod/verify"
-	fwdKey := os.Getenv("FWDKEY")
+	selection := ""
+	fwdKey := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, r.Body)
 	req.Header.Set("x-api-key", fwdKey)
@@ -107,7 +107,7 @@ func RedirectToRazer(w http.ResponseWriter, r *http.Request) {
 	if (*r).Method == "OPTIONS" {
 		return
 	}
-	u := "https://oauth2.razer.com/authorize_openid?response_type=code&l=en&scope=openid+email+profile&client_id=3ff785489ba2ed304b6880e481f238cfeada487e&state=login&redirect_uri=https://bank.ntucbee.click/auth/razer/callback"
+	u := ""
 	http.Redirect(w, r, u, http.StatusTemporaryRedirect)
 }
 
@@ -119,14 +119,14 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	code := r.URL.Query()["code"][0]
 	fmt.Println(code)
-	selection := "https://oauth2.razer.com/token"
+	selection := ""
 	client := http.Client{}
 	data := url.Values{}
-	data.Set("client_id", "3ff785489ba2ed304b6880e481f238cfeada487e")
-	data.Set("client_secret", "72a8ed13b850184a62d1f00c7b4e8ddc1fac5411")
+	data.Set("client_id", "")
+	data.Set("client_secret", "")
 	data.Set("grant_type", "authorization_code")
 	data.Set("code", code)
-	data.Set("redirect_uri", "https://bank.ntucbee.click/auth/razer/callback")
+	data.Set("redirect_uri", "")
 	req, _ := http.NewRequest("POST", selection, strings.NewReader(data.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
@@ -146,7 +146,7 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(result["scope"])
 		fmt.Println(result["token_type"])
 		// json.NewEncoder(w).Encode(result)
-		selection := "https://oauth2.razer.com/userinfo"
+		selection := ""
 		client := http.Client{}
 		ureq, _ := http.NewRequest("GET", selection, nil)
 		ureq.Header.Set("Authorization", "Bearer "+result["access_token"].(string))
@@ -270,9 +270,9 @@ func GetAllSavingssOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/clients/" + id + "/savings"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -309,9 +309,9 @@ func GetAllTransactionsOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["bankaccountid"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/transactions"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -350,7 +350,7 @@ func DepositeForclient(w http.ResponseWriter, r *http.Request) {
 	var input map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&input)
 	amount := fmt.Sprintf("%f", input["amount"].(float64))
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/transactions"
+	selection := ""
 	var data = []byte(`{
 		"amount": ` + amount + `,
 		"notes": "Deposit into savings account",
@@ -392,9 +392,9 @@ func GetAccountDetails(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["bankaccountid"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -426,14 +426,14 @@ func CreateSavingsAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings"
+	selection := ""
 	var data = []byte(`{
 		"savingsAccount": {
 			"name": "Digital Account",
 			"accountHolderType": "CLIENT",
 			"accountHolderKey": "` + id + `",
 			"accountState": "APPROVED",
-			"productTypeKey": "8a8e878471bf59cf0171bf6979700440",
+			"productTypeKey": "",
 			"accountType": "CURRENT_ACCOUNT",
 			"currencyCode": "SGD",
 			"allowOverdraft": "true",
@@ -476,7 +476,7 @@ func TransferBetweenClients(w http.ResponseWriter, r *http.Request) {
 	var input map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&input)
 	amount := fmt.Sprintf("%f", input["amount"].(float64))
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/transactions"
+	selection := ""
 	var data = []byte(`{
 		"type": "TRANSFER",
 		"amount": "` + amount + `",
@@ -484,8 +484,8 @@ func TransferBetweenClients(w http.ResponseWriter, r *http.Request) {
 		"toSavingsAccount": "` + input["target"].(string) + `",
 		"method":"bank"
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -519,7 +519,7 @@ func CreateLoanAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	var input map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&input)
 	amount := fmt.Sprintf("%f", input["amount"].(float64))
-	selection := "https://razerhackathon.sandbox.mambu.com/api/loans"
+	selection := ""
 	var data = []byte(`{
 		"loanAccount": {
 			"accountHolderType": "CLIENT",
@@ -545,8 +545,8 @@ func CreateLoanAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -561,9 +561,9 @@ func CreateLoanAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
-	// https://razerhackathon.sandbox.mambu.com/api/loans/JKDC429/transactions
+	
 	loanId := result["loanAccount"].(map[string]interface{})["id"].(string)
-	disburseURL := "https://razerhackathon.sandbox.mambu.com/api/loans/" + loanId + "/transactions"
+	disburseURL := ""
 	sclient := http.Client{}
 	var sdata = []byte(`{
 		"type": "DISBURSEMENT",
@@ -598,9 +598,9 @@ func GetAllLoansOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/clients/" + id + "/loans"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -639,9 +639,9 @@ func GetLoanDetails(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["loanaccountid"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/loans/" + id + "/"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -676,7 +676,7 @@ func CreateDepositAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings"
+	selection := ""
 	var data = []byte(`{
 		"savingsAccount" : {
 		"notes": "",
@@ -684,8 +684,8 @@ func CreateDepositAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		"accountHolderType": "CLIENT",
 		"accountHolderKey": "` + id + `",
 		"accountState": "APPROVED",
-		"productTypeKey": "8a8e867271bd280c0171bf768b9c1a81",
-		"assignedBranchKey": "8a8e878e71c7a4d70171ca4bd43e10a0",
+		"productTypeKey": "",
+		"assignedBranchKey": "",
 		"accountType": "FIXED_DEPOSIT",
 		"currencyCode": "SGD",
 		"interestSettings": {
@@ -693,8 +693,8 @@ func CreateDepositAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -719,9 +719,9 @@ func GetAllDepositOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/clients/" + id + "/savings"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -758,9 +758,9 @@ func GetDepositDetails(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["depositid"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -791,9 +791,9 @@ func GetAllAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	id := r.URL.Query()["mambukey"][0]
-	selection := "https://razerhackathon.sandbox.mambu.com/api/clients/" + id + "/savings"
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	selection := ""
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("GET", selection, nil)
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -831,8 +831,10 @@ func GetAllAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	sselection := "https://razerhackathon.sandbox.mambu.com/api/clients/" + id + "/loans"
-	sclient := http.Client{}
+	sselection := ""
+	sclient := 
+	
+	.Client{}
 	sreq, _ := http.NewRequest("GET", sselection, nil)
 	sreq.SetBasicAuth(mambuUser, mambuPass)
 	sresp, serr := sclient.Do(sreq)
@@ -874,11 +876,11 @@ func CreateTypesAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	id := r.URL.Query()["mambukey"][0]
+	id := r.URL.Query()[""][0]
 	accountType := r.URL.Query()["create"][0]
 
 	if accountType == "savings" {
-		selection := "https://bank.ntucbee.click/bank/client/savings?mambukey=" + id
+		selection := "" + id
 		client := http.Client{}
 		req, _ := http.NewRequest("POST", selection, r.Body)
 		req.Header.Set("Content-Type", "application/json")
@@ -895,7 +897,7 @@ func CreateTypesAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(result)
 		return
 	} else if accountType == "deposit" {
-		selection := "https://bank.ntucbee.click/bank/client/deposit?mambukey=" + id
+		selection := "" + id
 		client := http.Client{}
 		req, _ := http.NewRequest("POST", selection, r.Body)
 		req.Header.Set("Content-Type", "application/json")
@@ -912,7 +914,7 @@ func CreateTypesAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(result)
 		return
 	} else if accountType == "loans" {
-		selection := "https://bank.ntucbee.click/bank/client/loan?mambukey=" + id
+		selection := "" + id
 		client := http.Client{}
 		req, _ := http.NewRequest("POST", selection, r.Body)
 		req.Header.Set("Content-Type", "application/json")
@@ -944,7 +946,7 @@ func DepositMoneyToFDAccount(w http.ResponseWriter, r *http.Request) {
 	var input map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&input)
 	amount := fmt.Sprintf("%f", input["amount"].(float64))
-	selection := "https://razerhackathon.sandbox.mambu.com/api/savings/" + id + "/transactions"
+	selection := ""
 	var data = []byte(`{
 		"amount": ` + amount + `,
 		"notes": "Deposit into Fixed Deposit account",
@@ -957,8 +959,8 @@ func DepositMoneyToFDAccount(w http.ResponseWriter, r *http.Request) {
 			}
 		]
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -978,8 +980,8 @@ func DepositMoneyToFDAccount(w http.ResponseWriter, r *http.Request) {
 
 func ServeService() http.Handler {
 	router := mux.NewRouter()
-	router.HandleFunc("/auth/razer/login", RedirectToRazer)
-	router.HandleFunc("/auth/razer/callback", Callback)
+	router.HandleFunc("/auth/xx/login", RedirectToRazer)
+	router.HandleFunc("/auth/xx/callback", Callback)
 	router.HandleFunc("/auth/verify", Authorization)
 	router.HandleFunc("/bank/client/register", RegisterClientBank).Methods("POST", "OPTIONS")
 	router.HandleFunc("/bank/client/verify", GetClientVerified).Methods("GET", "OPTIONS")
