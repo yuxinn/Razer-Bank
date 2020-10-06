@@ -363,8 +363,8 @@ func DepositeForclient(w http.ResponseWriter, r *http.Request) {
 			}
 		]
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
@@ -447,8 +447,8 @@ func CreateSavingsAccountsOfClient(w http.ResponseWriter, r *http.Request) {
 		}
 	
 	}`)
-	mambuUser := os.Getenv("USERMAMBU")
-	mambuPass := os.Getenv("PASSMAMBU")
+	mambuUser := os.Getenv("")
+	mambuPass := os.Getenv("")
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", selection, bytes.NewBuffer(data))
 	req.SetBasicAuth(mambuUser, mambuPass)
